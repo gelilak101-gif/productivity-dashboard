@@ -167,7 +167,7 @@ export default function WeeklyDashboard({
 
   // Save plan to DB
   const savePlan = useCallback(async (overrides: Partial<{
-    focus: string, goals: string[], reflections: string, plans: string, reminders: string[]
+    focus: string, reflections: string, plans: string
   }> = {}) => {
     const payload = {
       weekStart,
@@ -184,7 +184,7 @@ export default function WeeklyDashboard({
     })
     setSaved(true)
     setTimeout(() => setSaved(false), 2000)
-  }, [weekStart, focus, goals, reflections, plans, reminders])
+  }, [weekStart, focus, reflections, plans])
 
   const debouncedSave = useDebounce(savePlan as (...args: unknown[]) => void, 1200)
 
@@ -245,35 +245,7 @@ export default function WeeklyDashboard({
 
   const gymOnDate = (date: string) => gymSessions.find(s => s.sessionDate === date)
 
-  // Goals
-  const addGoal = () => {
-    if (!newGoal.trim()) return
-    const updated = [...goals, newGoal.trim()]
-    setGoals(updated)
-    setNewGoal('')
-    savePlan({ goals: updated })
-  }
 
-  const removeGoal = (i: number) => {
-    const updated = goals.filter((_, idx) => idx !== i)
-    setGoals(updated)
-    savePlan({ goals: updated })
-  }
-
-  // Reminders
-  const addReminder = () => {
-    if (!newReminder.trim()) return
-    const updated = [...reminders, newReminder.trim()]
-    setReminders(updated)
-    setNewReminder('')
-    savePlan({ reminders: updated })
-  }
-
-  const removeReminder = (i: number) => {
-    const updated = reminders.filter((_, idx) => idx !== i)
-    setReminders(updated)
-    savePlan({ reminders: updated })
-  }
 
   const completedTasks = tasks.filter(t => t.completed).length
   const progress = tasks.length > 0 ? Math.round((completedTasks / tasks.length) * 100) : 0
@@ -327,7 +299,6 @@ export default function WeeklyDashboard({
             {[
               { label: 'Tasks done', value: `${completedTasks}/${tasks.length}`, icon: '✓', color: 'var(--accent-sage)' },
               { label: 'Gym sessions', value: `${gymCount}×`, icon: '💪', color: 'var(--accent-amber)' },
-              { label: 'Goals set', value: `${goals.length}`, icon: '🎯', color: 'var(--accent-rust)' },
             ].map(s => (
               <div key={s.label} style={{
                 background: 'white', border: '1px solid var(--border)', borderRadius: '10px',

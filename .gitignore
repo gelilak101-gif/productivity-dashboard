@@ -37,3 +37,4 @@ next-env.d.ts
 drizzle/
 .env.local
 .env.local.l
+.env*
